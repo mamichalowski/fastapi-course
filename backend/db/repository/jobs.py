@@ -9,3 +9,15 @@ def create_new_job(job: JobCreate, db : Session,owner_id):
     db.commit()
     db.refresh(job)
     return job
+
+def retreive_job(id:int,db:Session):
+    job = db.query(Job).filter(Job.id==id).first()
+    return job
+
+def list_jobs(db:Session):
+   # jobs = db.query(Job).filter(Job.is_active == True)
+   jobs = db.query(Job).offset(0).limit(100).all()
+   return jobs
+
+
+
