@@ -49,7 +49,7 @@ def delete_job(id:int,db:Session=Depends(get_db)):
     message = delete_job_by_id(id=id,db=db,owner_id=owner_id)
     if not message:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-        detail="Job with id {id} does not exists.")
+        detail=f"Job with id {id} does not exists.")
     return{"detail":"Successfully deleted Job."}
 
         
