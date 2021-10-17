@@ -3,6 +3,7 @@ from core.config import settings
 from db.session import engine
 from db.base import Base
 from apis.base import api_router
+from webapps.base import api_router as webapp_router
 import uvicorn
 
 
@@ -11,6 +12,7 @@ def create_tables():
 
 def include_router(app):
     app.include_router(api_router)
+    app.include_router(webapp_router)
 
 
 def start_application():
@@ -27,9 +29,9 @@ def start_application():
 
 app = start_application()
 
-@app.get("/")
-def hello_app():
-    return {"detail":"Hello World !"}
+#@app.get("/")
+#def hello_app():
+#    return {"detail":"Hello World !"}
 
 if __name__ == '__main__':
     uvicorn.run(app, host='0.0.0.0', port=8000)
