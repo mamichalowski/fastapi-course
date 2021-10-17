@@ -47,13 +47,16 @@ def update_job(id:int,job:JobCreate,db:Session=Depends(get_db)):
     return {"detail":"Successfully updated data."}
 
 @router.delete("/delete{id}")
-def delete_job(id:int,db:Session=Depends(get_db)):
-    owner_id=1
-    message = delete_job_by_id(id=id,db=db,owner_id=owner_id)
-    if not message:
+def delete_job(id:int,db:Session=Depends(get_db),current_user : User=Depends(get_current_user_from_token)):
+    job = retreive_job(id=id,db=db)
+    if not Job:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-        detail=f"Job with id {id} does not exists.")
-    return{"detail":"Successfully deleted Job."}
+        detail=f"Job with id {id} does not exists")
+    if job.owner_id == current_user.id or current_user.is_superuser:
+        delete_job_by_id(id=id, db=db, owner_id=current_user.id)
+        return {"detail":"Job Successfully deleted"}
+    raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+    detail="You are not permitted!!")
 
         
 
